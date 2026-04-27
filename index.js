@@ -10,3 +10,7 @@ async function getWalletBalance()
 }
 
 getWalletBalance();
+// Create provider for Base network
+const provider = new ethers.JsonRpcProvider("https://mainnet.base.org");
+
+// Function to get wallet balance
