@@ -1,4 +1,4 @@
-// Base Wallet Checker - Step 1
+// Base Wallet Checker - Step 2
 
 const { ethers } = require("ethers");
 
@@ -12,12 +12,22 @@ async function getWalletBalance() {
   const address = process.argv[2];
 
   if (!address) {
-    console.log("Please provide wallet address");
+    console.log("❌ Please provide wallet address");
+    console.log("👉 Example: node index.js 0xYourWalletAddress");
     return;
   }
 
-  const balance = await provider.getBalance(address);
-  console.log("Balance:", ethers.formatEther(balance));
+  try {
+    const balance = await provider.getBalance(address);
+
+    console.log("=================================");
+    console.log("📍 Network: Base");
+    console.log("👛 Wallet:", address);
+    console.log("💰 Balance:", ethers.formatEther(balance), "ETH");
+    console.log("=================================");
+  } catch (error) {
+    console.log("❌ Error fetching balance");
+  }
 }
 
 // Run function
