@@ -1,4 +1,4 @@
-// Base Wallet Checker - Step 1
+// Base Wallet Checker - Step 2
 
 const { ethers } = require("ethers");
 
@@ -9,8 +9,25 @@ const provider = new ethers.JsonRpcProvider("https://mainnet.base.org");
 async function getWalletBalance() {
   console.log("Connecting to Base network...");
 
-  const balance = await provider.getBalance("0x0000000000000000000000000000000000000000");
-  console.log("Balance:", ethers.formatEther(balance));
+  const address = process.argv[2];
+
+  if (!address) {
+    console.log("❌ Please provide wallet address");
+    console.log("👉 Example: node index.js 0xYourWalletAddress");
+    return;
+  }
+
+  try {
+    const balance = await provider.getBalance(address);
+
+    console.log("=================================");
+    console.log("📍 Network: Base");
+    console.log("👛 Wallet:", address);
+    console.log("💰 Balance:", ethers.formatEther(balance), "ETH");
+    console.log("=================================");
+  } catch (error) {
+    console.log("❌ Error fetching balance");
+  }
 }
 
 // Run function
