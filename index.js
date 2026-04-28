@@ -9,7 +9,14 @@ const provider = new ethers.JsonRpcProvider("https://mainnet.base.org");
 async function getWalletBalance() {
   console.log("Connecting to Base network...");
 
-  const balance = await provider.getBalance("0x0000000000000000000000000000000000000000");
+  const address = process.argv[2];
+
+  if (!address) {
+    console.log("Please provide wallet address");
+    return;
+  }
+
+  const balance = await provider.getBalance(address);
   console.log("Balance:", ethers.formatEther(balance));
 }
 
