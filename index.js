@@ -1,4 +1,4 @@
-// Base Gas Tracker - Step 2
+// Base Gas Tracker - Step 3
 
 const { ethers } = require("ethers");
 const fs = require("fs");
@@ -15,12 +15,11 @@ async function getGasPrice() {
 
   try {
     const feeData = await provider.getFeeData();
-    const gasPrice = feeData.gasPrice.toString();
+    const gasPrice = Number(feeData.gasPrice);
     const time = new Date().toLocaleString();
 
-    const logEntry = `${time} | Gas Price: ${gasPrice}\n`;
+    const logEntry = `${time} | ${gasPrice}\n`;
 
-    // Save to file
     fs.appendFileSync(LOG_FILE, logEntry);
 
     console.log("\n======= GAS DATA =======");
@@ -30,9 +29,28 @@ async function getGasPrice() {
     console.log("💾 Saved to    :", LOG_FILE);
     console.log("========================\n");
 
+    showStats();
+
   } catch (error) {
     console.log("❌ Error fetching gas data:", error.message);
   }
+}
+
+// Function to show stats
+function showStats() {
+  if (!fs.existsSync(LOG_FILE)) return;
+
+  const data = fs.readFileSync(LOG_FILE, "utf-8").trim().split("\n");
+
+  const last5 = data.slice(-5);
+  const values = last5.map(line => Number(line.split("|")[1]));
+
+  const avg = values.reduce((a, b) => a + b, 0) / values.length;
+
+  console.log("📊 Last 5 Gas Entries:");
+  last5.forEach(line => console.log("   ", line));
+
+  console.log("📈 Average Gas (last 5):", avg.toFixed(2));
 }
 
 // Run function
