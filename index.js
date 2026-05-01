@@ -1,4 +1,4 @@
-// Base Gas Tracker - Step 3
+// Base Gas Tracker - Step 4
 
 const { ethers } = require("ethers");
 const fs = require("fs");
@@ -8,6 +8,19 @@ const provider = new ethers.JsonRpcProvider("https://mainnet.base.org");
 
 // File to store logs
 const LOG_FILE = "gas-log.txt";
+
+// Handle CLI help
+if (process.argv.includes("--help")) {
+  console.log(`
+Usage:
+  node index.js           → Fetch current gas + log
+  node index.js --help    → Show help
+
+Description:
+  Tracks Base gas price and stores logs locally.
+`);
+  process.exit();
+}
 
 // Function to get gas price
 async function getGasPrice() {
